@@ -1,8 +1,11 @@
-import { Controller, Get, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Usuarios')
 @Controller('user')
 export class UserController {
     @UseGuards(JwtAuthGuard)
@@ -13,8 +16,8 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('ADMIN')
-    @Get('admin-only')
-    adminData() {
-    return { message: 'Datos secretos solo para ADMIN' };
+    @Get('admin')
+    adminOnly() {
+    return { message: 'Solo los ADMIN pueden ver esto' };
     }
 }

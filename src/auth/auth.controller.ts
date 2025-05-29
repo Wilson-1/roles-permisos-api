@@ -1,17 +1,22 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthDto } from './dto/auth.dto';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-    constructor(private auth: AuthService) {}
+    constructor(private readonly auth: AuthService) {}
 
     @Post('register')
-    register(@Body() body: { email: string; password: string }) {
-        return this.auth.register(body.email, body.password);
+    @ApiOperation({ summary: 'Registro de usuario' })
+    register(@Body() body: AuthDto) {
+    return this.auth.register(body.email, body.password);
     }
 
     @Post('login')
-    login(@Body() body: { email: string; password: string }) {
-        return this.auth.login(body.email, body.password);
+    @ApiOperation({ summary: 'Inicio de sesión de usuario' })
+    login(@Body() body: AuthDto) {
+    return this.auth.login(body.email, body.password);
     }
 }
